@@ -1,4 +1,10 @@
-export type PageTab = 'HOME' | 'PRODUCTS' | 'SPORTS' | 'ABOUT';
+export type PageTab =
+  | 'HOME'
+  | 'PRODUCTS'
+  | 'SPORTS'
+  | 'ABOUT'
+  | 'LOGIN'
+  | 'REGISTER';
 
 export type SachetType = 'PRE' | 'DURING' | 'POST';
 

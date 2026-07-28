@@ -11,6 +11,8 @@ import ProductsTab from './components/ProductsTab';
 import AboutTab from './components/AboutTab';
 import Footer from './components/Footer';
 import { Zap, Sparkles } from 'lucide-react';
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<PageTab>('HOME');
@@ -152,6 +154,18 @@ export default function App() {
         {activeTab === 'ABOUT' && (
           <div className="animate-fade-in">
             <AboutTab />
+          </div>
+        )}
+
+        {activeTab === 'LOGIN' && (
+          <div className="animate-fade-in">
+            <Login />
+          </div>
+        )}
+
+        {activeTab === 'REGISTER' && (
+          <div className="animate-fade-in">
+            <Register />
           </div>
         )}
       </main>
