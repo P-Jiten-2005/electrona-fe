@@ -1,3 +1,4 @@
+import Profile from "./pages/Profile";
 import React, { useState, useEffect } from 'react';
 import { PageTab } from './types';
 import Header from './components/Header';
@@ -16,6 +17,7 @@ import Register from "./pages/Register";
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<PageTab>('HOME');
+  console.log("Current Active Tab:", activeTab);
   const [transitioning, setTransitioning] = useState<boolean>(false);
   const [targetTab, setTargetTab] = useState<PageTab>('HOME');
   const [direction, setDirection] = useState<'left' | 'right'>('right');
@@ -25,7 +27,15 @@ export default function App() {
     if (newTab === activeTab) return;
     
     // Determine horizontal translation direction based on tab index comparison
-    const tabsOrder: PageTab[] = ['HOME', 'PRODUCTS', 'SPORTS', 'ABOUT'];
+    const tabsOrder: PageTab[] = [
+  'HOME',
+  'PRODUCTS',
+  'SPORTS',
+  'ABOUT',
+  'LOGIN',
+  'REGISTER',
+  'PROFILE'
+];
     const currentIdx = tabsOrder.indexOf(activeTab);
     const targetIdx = tabsOrder.indexOf(newTab);
     setDirection(targetIdx > currentIdx ? 'right' : 'left');
@@ -158,16 +168,26 @@ export default function App() {
         )}
 
         {activeTab === 'LOGIN' && (
-          <div className="animate-fade-in">
-            <Login />
-          </div>
-        )}
+         <div className="animate-fade-in">
+            <Login setActiveTab={handleTabChange} />
+         </div>
+       )}
 
-        {activeTab === 'REGISTER' && (
-          <div className="animate-fade-in">
-            <Register />
-          </div>
-        )}
+        {activeTab === "REGISTER" && (
+         <div className="animate-fade-in">
+          <Register setActiveTab={handleTabChange} />
+         </div>
+       )}
+
+       {activeTab === "PROFILE" && (
+        <div className="animate-fade-in">
+         {localStorage.getItem("idToken") ? (
+          <Profile setActiveTab={handleTabChange} />
+         ) : (
+           <Login setActiveTab={handleTabChange} />
+         )}
+        </div>
+      )}
       </main>
 
       {/* High-voltage diagnostic modular footer */}

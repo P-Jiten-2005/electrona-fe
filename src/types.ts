@@ -4,7 +4,8 @@ export type PageTab =
   | 'SPORTS'
   | 'ABOUT'
   | 'LOGIN'
-  | 'REGISTER';
+  | 'REGISTER'
+  | 'PROFILE';
 
 export type SachetType = 'PRE' | 'DURING' | 'POST';
 

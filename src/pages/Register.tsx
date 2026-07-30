@@ -1,6 +1,55 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
+import { PageTab } from "../types";
 
-export default function Register() {
+interface RegisterProps {
+  setActiveTab: (tab: PageTab) => void;
+}
+
+export default function Register({ setActiveTab }: RegisterProps) {
+  const [fullName, setFullName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleRegister = async () => {
+    setError("");
+
+    if (!email || !password || !confirmPassword) {
+      setError("Please fill all required fields.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      await axios.post("http://localhost:5000/api/auth/register", {
+        email,
+        password,
+      });
+
+      alert("Registration Successful!");
+
+      setActiveTab("LOGIN");
+    } catch (err: any) {
+      if (err.response?.data?.message) {
+        setError(err.response.data.message);
+      } else {
+        setError("Registration failed.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen flex justify-center items-center bg-gray-100">
 
@@ -13,37 +62,56 @@ export default function Register() {
         <input
           type="text"
           placeholder="Full Name"
+          value={fullName}
+          onChange={(e) => setFullName(e.target.value)}
           className="w-full border p-3 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-orange-500"
         />
 
         <input
           type="email"
-          placeholder="Gmail"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           className="w-full border p-3 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-orange-500"
         />
 
         <input
           type="tel"
           placeholder="Phone Number"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
           className="w-full border p-3 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-orange-500"
         />
 
         <input
           type="password"
           placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           className="w-full border p-3 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-orange-500"
         />
 
         <input
           type="password"
           placeholder="Confirm Password"
-          className="w-full border p-3 rounded mb-6 focus:outline-none focus:ring-2 focus:ring-orange-500"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          className="w-full border p-3 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-orange-500"
         />
 
+        {error && (
+          <p className="text-red-500 text-sm mb-4">
+            {error}
+          </p>
+        )}
+
         <button
-          className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold p-3 rounded transition"
+          type="button"
+          onClick={handleRegister}
+          disabled={loading}
+          className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold p-3 rounded transition disabled:bg-gray-400"
         >
-          REGISTER
+          {loading ? "Registering..." : "REGISTER"}
         </button>
 
         <p className="text-center mt-6 text-gray-600">
@@ -51,6 +119,8 @@ export default function Register() {
         </p>
 
         <button
+          type="button"
+          onClick={() => setActiveTab("LOGIN")}
           className="w-full mt-3 border border-black text-black hover:bg-black hover:text-white font-semibold p-3 rounded transition"
         >
           LOGIN
